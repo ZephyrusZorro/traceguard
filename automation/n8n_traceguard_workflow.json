@@ -1,0 +1,79 @@
+{
+  "name": "TraceGuard Incident Triage & Security Alert Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "traceguard-alert",
+        "responseMode": "onReceived"
+      },
+      "id": "node-webhook-trigger",
+      "name": "TraceGuard Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.payload.severity}}",
+              "operation": "equals",
+              "value2": "CRITICAL"
+            }
+          ]
+        }
+      },
+      "id": "node-severity-router",
+      "name": "Is CRITICAL Security Compromised?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_OR_TELEGRAM_WEBHOOK_URL}}",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "=[CRITICAL] TraceGuard detected {{$json.payload.verdict}} on trace {{$json.payload.trace_id}}. Review pending capability policy in Human Approval Gate."
+            }
+          ]
+        }
+      },
+      "id": "node-alert-dispatch",
+      "name": "Dispatch Security Incident Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 200]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=http://host.docker.internal:8000/api/v1/traces/{{$json.payload.trace_id}}"
+      },
+      "id": "node-fetch-forensics",
+      "name": "Fetch Full C3-Attributor Forensics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [780, 420]
+    }
+  ],
+  "connections": {
+    "TraceGuard Webhook Trigger": {
+      "main": [[{"node": "Is CRITICAL Security Compromised?", "type": "main", "index": 0}]]
+    },
+    "Is CRITICAL Security Compromised?": {
+      "main": [
+        [{"node": "Dispatch Security Incident Alert", "type": "main", "index": 0}],
+        [{"node": "Fetch Full C3-Attributor Forensics", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {"executionOrder": "v1"}
+}

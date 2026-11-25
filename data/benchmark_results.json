@@ -1,0 +1,105 @@
+{
+  "seed": 42,
+  "trace_benchmark": {
+    "total_traces": 360,
+    "train_traces": 216,
+    "val_traces": 72,
+    "test_traces": 72,
+    "feature_count": 23,
+    "methods": [
+      {
+        "method": "random_baseline",
+        "top1_step_accuracy": 0.1389,
+        "top3_step_accuracy": 0.5833,
+        "agent_attribution_accuracy": 0.2083,
+        "mrr": 0.3952,
+        "ece": 0.7505,
+        "mean_latency_ms": 0.0
+      },
+      {
+        "method": "last_error_heuristic",
+        "top1_step_accuracy": 0.25,
+        "top3_step_accuracy": 0.875,
+        "agent_attribution_accuracy": 0.25,
+        "mrr": 0.525,
+        "ece": 0.7,
+        "mean_latency_ms": 0.02
+      },
+      {
+        "method": "lexical_drift_only",
+        "top1_step_accuracy": 0.0833,
+        "top3_step_accuracy": 0.625,
+        "agent_attribution_accuracy": 0.1806,
+        "mrr": 0.3993,
+        "ece": 0.7297,
+        "mean_latency_ms": 5.31
+      },
+      {
+        "method": "rule_only_mast",
+        "top1_step_accuracy": 0.875,
+        "top3_step_accuracy": 0.9306,
+        "agent_attribution_accuracy": 1.0,
+        "mrr": 0.9074,
+        "ece": 0.565,
+        "mean_latency_ms": 5.31
+      },
+      {
+        "method": "ml_ranker_only_ablation",
+        "top1_step_accuracy": 1.0,
+        "top3_step_accuracy": 1.0,
+        "agent_attribution_accuracy": 1.0,
+        "mrr": 1.0,
+        "ece": 0.0,
+        "mean_latency_ms": 15.02
+      },
+      {
+        "method": "c3_attributor_full",
+        "top1_step_accuracy": 1.0,
+        "top3_step_accuracy": 1.0,
+        "agent_attribution_accuracy": 1.0,
+        "mrr": 1.0,
+        "ece": 0.0619,
+        "mean_latency_ms": 39.78
+      }
+    ],
+    "c3_mast_macro_f1": 1.0,
+    "c3_counterfactual_recovery_rate": 1.0,
+    "c3_per_mode_top1_accuracy": {
+      "MISALIGN_INFO_WITHHOLDING": 1.0,
+      "MISALIGN_TOOL_ARG_HALLUCINATION": 1.0,
+      "SEC_INDIRECT_PROMPT_INJECTION": 1.0,
+      "SPEC_CONTEXT_RESET": 1.0,
+      "SPEC_INFINITE_LOOP": 1.0,
+      "SPEC_ROLE_VIOLATION": 1.0,
+      "VERIFY_PREMATURE_TERMINATION": 1.0,
+      "VERIFY_SUPERFICIAL_CHECK": 1.0
+    }
+  },
+  "injection_benchmark": {
+    "dataset_sizes": {
+      "train": 360,
+      "val": 120,
+      "test": 120
+    },
+    "val": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0,
+      "hard_negative_fpr": 0.0
+    },
+    "test": {
+      "precision": 0.7808,
+      "recall": 0.95,
+      "f1": 0.8571,
+      "roc_auc": 0.9508,
+      "hard_negative_fpr": 0.2909
+    },
+    "keyword_baseline_test": {
+      "precision": 0.6122,
+      "recall": 0.5,
+      "f1": 0.5505,
+      "hard_negative_fpr": 0.3455
+    }
+  }
+}
